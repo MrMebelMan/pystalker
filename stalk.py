@@ -88,9 +88,10 @@ class Stalker:
                 'https://www.facebook.com/':      '^| Facebook',
                 'https://pinterest.com/':         'name="og:title" content="Pinterest"',
                 'https://t.me/':                  'content="Telegram: Contact',
-                'https://gab.com/':               '<meta property="og:title" content="Gab"',
+                'https://gab.com/':               '^Followers',
                 'https://www.mixcloud.com/':      'Page Not Found | Mixcloud',
                 'https://steamcommunity.com/id/': 'profile could not be found',
+                'https://hive.one/p/':            'HIVE | 404',
             }
             threads = []
 
