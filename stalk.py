@@ -92,6 +92,7 @@ class Stalker:
                 'https://www.mixcloud.com/':      'Page Not Found | Mixcloud',
                 'https://steamcommunity.com/id/': 'profile could not be found',
                 'https://hive.one/p/':            'HIVE | 404',
+                'https://gitlab.com/users/':      'You need to sign in',
             }
             threads = []
 
