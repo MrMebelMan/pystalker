@@ -26,6 +26,7 @@ class Stalker:
     def check_by_content(self, url: str, content: str, results: list):
         r = requests_get(url, headers=self.headers, verify=True, allow_redirects=True)
 
+        # check if content is present/not present in the response body
         if content[0] == '^':
             content = content[1:]
             fail_condition = content not in r.text
@@ -44,11 +45,20 @@ class Stalker:
         print(r.url)
         results.append(r.url)
 
+    def check_by_rest_api(self, url: str, profile_url: str, results: list):
+        r = requests_get(url, headers=self.headers, verify=True, allow_redirects=False)
+        json = r.json()
+        if r.status_code != 200:
+            return
+        if not json or type(json) is list and json[0] is None:
+            return
+        print(profile_url)
+        results.append(r.url)
+
     def stalk(self):
         results = []
         for username in self.user_names:
             urls = [
-                'https://steemit.com/@%s',
                 'https://youtube.com/user/%s', 
                 'https://reddit.com/user/%s',
                 'https://vk.com/%s',
@@ -59,7 +69,7 @@ class Stalker:
                 'https://www.flickr.com/people/%s',
                 'https://mastodon.social/@%s',
                 'https://wikipedia.org/wiki/User:%s',
-                'https://www.quora.com/%s',
+                'https://www.quora.com/profile/%s',
                 'https://github.com/%s',
                 'https://habr.com/ru/users/%s',
                 'https://soundcloud.com/%s',
@@ -84,7 +94,12 @@ class Stalker:
               'https://pastebin.com/u/',
               'https://en.gravatar.com/'
             ]
+            urls_api = {
+                # url: profile_url
+                'https://api.steemjs.com/lookupAccountNames?accountNames[]=%s': 'https://steemit.com/@%s'
+            }
             urls_content = {
+                # url: fail_condition (leading ^ is the negation)
                 'https://www.facebook.com/':      '^| Facebook',
                 'https://pinterest.com/':         'name="og:title" content="Pinterest"',
                 'https://t.me/':                  'content="Telegram: Contact',
@@ -94,6 +109,7 @@ class Stalker:
                 'https://hive.one/p/':            'HIVE | 404',
                 'https://gitlab.com/users/':      'You need to sign in',
             }
+
             threads = []
 
             for url in urls:
@@ -103,6 +119,11 @@ class Stalker:
 
             for url in urls_redirect:
                 thread = Thread(target=self.check_by_redirect, args=(url + username, results))
+                thread.start()
+                threads.append(thread)
+
+            for url, profile_url in urls_api.items():
+                thread = Thread(target=self.check_by_rest_api, args=(url % username, profile_url % username, results))
                 thread.start()
                 threads.append(thread)
 
