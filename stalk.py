@@ -100,14 +100,16 @@ class Stalker:
             }
             urls_content = {
                 # url: fail_condition (leading ^ is the negation)
-                'https://www.facebook.com/':      '^| Facebook',
-                'https://pinterest.com/':         'name="og:title" content="Pinterest"',
-                'https://t.me/':                  'content="Telegram: Contact',
-                'https://gab.com/':               '^Followers',
-                'https://www.mixcloud.com/':      'Page Not Found | Mixcloud',
-                'https://steamcommunity.com/id/': 'profile could not be found',
-                'https://hive.one/p/':            'HIVE | 404',
-                'https://gitlab.com/users/':      'You need to sign in',
+                'https://facebook.com/':              '^| Facebook',
+                'https://pinterest.com/':             'name="og:title" content="Pinterest"',
+                'https://t.me/':                      'content="Telegram: Contact',
+                'https://gab.com/':                   '^Followers',
+                'https://mixcloud.com/':              'Page Not Found | Mixcloud',
+                'https://steamcommunity.com/id/':     'profile could not be found',
+                'https://hive.one/p/':                'HIVE | 404',
+                'https://gitlab.com/users/':          'You need to sign in',
+                'https://cnet.com/profiles/':         'Let’s not point fingers',
+                'http://techist.com/forums/members/': 'not registered',
             }
 
             threads = []
